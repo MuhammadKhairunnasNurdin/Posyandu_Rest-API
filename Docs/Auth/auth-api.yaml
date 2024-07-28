@@ -1,0 +1,85 @@
+openapi: 3.0.3
+info:
+  title: Authenticate User
+  description: Authenticate User
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:84'
+    description: Local server
+paths:
+  /api/user/login:
+    post:
+      description: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: test@example.com
+                password:
+                  type: string
+                  format: password
+                  example: Password123
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      userId:
+                        type: integer
+                        format: int64
+                        minimum: 1
+                        example: 1
+                      civilianId:
+                        type: integer
+                        format: int64
+                        minimum: 1
+                        example: 2
+                      username:
+                        type: string
+                        example: test
+                      email:
+                        type: string
+                        format: email
+                        example: test@example.com
+                      emailVerifiedAt:
+                        type: string
+                        format: date-time
+                        example: 2024-07-21T17:32:28Z
+                      role:
+                        type: string
+                        example: admin
+                      photoProfile:
+                        type: string
+                        description: URL of the photo profile from cloud
+                        example: https://example.com/photo.jpg
+        '401':
+          description: Login failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Too many login attempts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        errors:
+          type: object

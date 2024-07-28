@@ -38,7 +38,6 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'password' => static::$password ??= Hash::make(env('DEFAULT_USER_PASSWORD')),
             'role' => $this->faker->randomElement(RoleEnum::getValuesWithout(RoleEnum::CHAIRMAN->value)),
-            'remember_token' => Str::random(10),
         ];
     }
 

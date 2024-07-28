@@ -27,6 +27,7 @@ class User extends Authenticatable
         'civilian_id',
         'username',
         'email',
+        'email_verified_at',
         'password',
         'role',
         'photo_profile'
