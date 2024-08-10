@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignUlid('user_id');
+            $table->foreignUlid('user_id')->constrained();
             $table->string('name', 100);
             $table->date('date_of_activity');
             $table->time('start_time');

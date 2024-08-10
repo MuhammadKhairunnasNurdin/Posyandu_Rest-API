@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignUlid('user_id');
+            $table->foreignUlid('user_id')->constrained();
             $table->string('title', 100);
             $table->text('body');
             $table->string('excerpt', 200);
