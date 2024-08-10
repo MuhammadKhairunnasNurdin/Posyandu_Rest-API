@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('baby_medical_checkups', function (Blueprint $table) {
-            $table->foreignId('id')->primary()->constrained('medical_checkups');
+            $table->foreignUlid('id')->primary()->constrained('medical_checkups');
             $table->decimal('head_perimeter', 6, 3);
             $table->decimal('arm_perimeter', 6, 3);
             $table->enum('breast_milk', BreastMilkEnum::getValues());
