@@ -2,15 +2,16 @@
 
 namespace App\Http\Requests\Auth;
 
-use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 
+/**
+ *
+ */
 class LoginRequest extends FormRequest
 {
     /**
@@ -45,15 +46,12 @@ class LoginRequest extends FormRequest
 
     /**
      * Attempt to authenticate the request's credentials.
-     *
+     * @return string The token
      */
-    public function authenticate(): User
+    public function authenticate(): string
     {
         $this->ensureIsNotRateLimited();
-
-        $user = User::where('email', $this->string('email'))->first();
-
-        if (! $user || ! Hash::check($this->string('password'), $user->password)) {
+        if (! $token =  Auth::attempt($this->validated()) ) {
             RateLimiter::hit($this->throttleKey());
 
             throw new HttpResponseException(response([
@@ -65,7 +63,7 @@ class LoginRequest extends FormRequest
 
         RateLimiter::clear($this->throttleKey());
 
-        return $user;
+        return $token;
     }
 
     /**

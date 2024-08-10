@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\Shared\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -15,11 +16,11 @@ class AuthController extends Controller
      */
     public function authenticate(LoginRequest $request): JsonResponse
     {
-        $user = $request->authenticate();
-        return (new UserResource($user))
+        $token = $request->authenticate();
+        return (new UserResource(Auth::user()))
             ->additional([
                 'data' => [
-                    'token' => $user->createToken('auth_token')->plainTextToken
+                    'token' => $token
                 ]
             ])
             ->response();
@@ -30,8 +31,7 @@ class AuthController extends Controller
      */
     public function logout(User $user): JsonResponse
     {
-        $user->tokens()->delete();
-
+       auth()->logout();
         return response()->json([
             'message' => 'Logged out successfully'
         ]);
