@@ -12,3 +12,15 @@ Route::group(
         Route::post('logout', [\App\Http\Controllers\Auth\AuthController::class, 'logout']);
     }
 );
+Route::group(
+    [
+        'middleware' => [
+            'jwt.auth',
+            'authorization:' . \App\Enum\User\RoleEnum::ADMIN->value
+        ],
+        'prefix'=> 'user',
+    ],
+    function () {
+        Route::get('users', [\App\Http\Controllers\User\UserController::class, 'index']);
+    }
+);

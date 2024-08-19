@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Resources\Shared\UserResource;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -16,13 +14,13 @@ class AuthController extends Controller
     public function authenticate(LoginRequest $request): JsonResponse
     {
         $token = $request->authenticate();
-        return (new UserResource(Auth::user()))
-            ->additional([
-                'data' => [
-                    'token' => $token
-                ]
-            ])
-            ->response();
+        return response()->json([
+            'data' => [
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => auth()->factory()->getTTL() * 60 . ' second'
+            ],
+        ]);
     }
 
     /**
